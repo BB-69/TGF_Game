@@ -7,8 +7,8 @@ public class Logger
 
     public Logger(string componentName, MonoBehaviour owner = null)
     {
-        CharacterComponent character = owner.GetComponent<CharacterComponent>();
-        string entityInfo = character != null
+        CharacterComponent character = owner != null ? owner.GetComponent<CharacterComponent>() : null;
+        string entityInfo = (character != null)
             ? $":Entity#{character.index}({owner.gameObject.name})"
             : $"";
 

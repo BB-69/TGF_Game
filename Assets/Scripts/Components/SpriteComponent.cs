@@ -12,8 +12,6 @@ public class SpriteComponent : MonoBehaviour
     private float timer;
     private bool isPlaying = true;
 
-    private const string framePath = "Visual/Sprites/Frames/";
-
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -64,6 +62,7 @@ public class SpriteComponent : MonoBehaviour
         if (playing) Play(); else Stop();
     }
 
+    private const string framePath = "Visual/Sprites/Frames/";
     public Sprite[] GetFrames(string innerPath)
     {
         Sprite[] newFrames = Resources.LoadAll<Sprite>(framePath + innerPath);

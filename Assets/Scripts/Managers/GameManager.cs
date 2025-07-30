@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class GameManager : MonoBehaviour
     Logger log;
 
     private MapData currentMapData;
+    private GameObject currentMapPrefab;
     public GameObject player;
-    private const string mapPath = "MapData/";
     public Dictionary<int, MapData> mapLevel { get; private set; }
 
     private int currentHeadCount = 0;
@@ -35,25 +36,54 @@ public class GameManager : MonoBehaviour
     {
         log = new Logger("GameManager");
 
-        LoadMapData();
-        SetupMap(currentLevel);
+        StartCoroutine(InitStartLevel(currentLevel));
+    }
+
+    IEnumerator InitStartLevel(int level)
+    {
+        yield return StartCoroutine(LoadMapData());
+        yield return null;
+        SetupMap(level);
         ResetGameStats();
     }
 
     void Update()
     {
-        if (!isGameOver && !isGameWon) CheckWinLose();
+        if (currentMapData && !isGameOver && !isGameWon) CheckWinLose();
     }
 
-    private void LoadMapData()
+    private const string mapPath = "MapData/";
+    private IEnumerator LoadMapData()
     {
-        // loading process here
+        mapLevel = new Dictionary<int, MapData>();
+        MapData[] loadedMapData = Resources.LoadAll<MapData>(mapPath);
+        int level = 1;
+        string _loadedMapLog = "Loaded Maps: ";
+        foreach (MapData d in loadedMapData)
+        {
+            _loadedMapLog += $"{{ {level} : {d.mapName} }}, ";
+            mapLevel[level++] = d;
+            yield return null;
+        }
+        if (mapLevel.Count == 0) _loadedMapLog += "None";
+        log.Log(_loadedMapLog);
     }
 
     public void SetupMap(int level)
     {
         if (currentMapData != null) Destroy(currentMapData);
+        if (currentMapPrefab != null) Destroy(currentMapPrefab);
+
         currentMapData = mapLevel[level];
+
+        if (currentMapData.mapPrefab != null)
+        {
+            currentMapPrefab = Instantiate(currentMapData.mapPrefab);
+            currentMapPrefab.SetActive(false);
+            currentMapPrefab.transform.SetParent(transform);
+            currentMapPrefab.transform.localPosition = Vector2.zero;
+            currentMapPrefab.SetActive(true);
+        }
     }
 
     public void ResetGameStats()
@@ -77,13 +107,13 @@ public class GameManager : MonoBehaviour
     void WinGame()
     {
         isGameWon = true;
-        Debug.Log("You win!");
+        log.Log("You win!");
     }
 
     void LoseGame()
     {
         isGameOver = true;
-        Debug.Log("Game Over...");
+        log.Log("Game Over...");
     }
 
     public void NextLevel()
