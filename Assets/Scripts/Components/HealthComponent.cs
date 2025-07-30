@@ -10,9 +10,9 @@ public class HealthComponent : MonoBehaviour
     void Awake()
     {
         character = GetComponent<CharacterComponent>();
-        currentHP = character.maxHP;
-
         log = new Logger("Health", character);
+
+        currentHP = character.maxHP;
     }
 
     public void TakeDamage(int amount)

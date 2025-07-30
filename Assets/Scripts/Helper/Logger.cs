@@ -5,14 +5,14 @@ public class Logger
 {
     private readonly string prefix;
 
-    public Logger(string componentName, MonoBehaviour owner)
+    public Logger(string componentName, MonoBehaviour owner = null)
     {
         CharacterComponent character = owner.GetComponent<CharacterComponent>();
         string entityInfo = character != null
-            ? $"Entity#{character.index}({owner.gameObject.name})"
+            ? $":Entity#{character.index}({owner.gameObject.name})"
             : $"";
 
-        prefix = $"[{componentName}:{entityInfo}]";
+        prefix = $"[{componentName}{entityInfo}]";
     }
 
     public void Log(string msg) { Debug.Log($"{prefix} {msg}"); }
