@@ -1,14 +1,16 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
+using Utils;
 
-[RequireComponent(typeof(MovementComponent))]
 public class PlayerInput : MonoBehaviour
 {
-    private MovementComponent movement;
+    private MovementComponent Mov;
+    private SpriteComponent Spr;
 
     void Start()
     {
-        movement = GetComponent<MovementComponent>();
+        Mov = GetComponent<MovementComponent>();
+        Spr = GetComponent<SpriteComponent>();
     }
 
     void FixedUpdate()
@@ -18,11 +20,19 @@ public class PlayerInput : MonoBehaviour
 
     void HandleInput()
     {
-        if (movement == null) return;
+        if (Mov != null)
+        {
+            Mov.moveDir = new Vector2(
+                Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical")
+            ).normalized;
 
-        movement.moveDir = new Vector2(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical")
-        ).normalized;
+            if (Spr != null)
+            {
+                string dir = CustomHelper.Get8DirectionName(Mov.moveDir);
+                Sprite[] newFrames = Spr.GetFrames((dir == "NONE") ? "Player_Idle" : ("Player_Move_" + dir));
+                if (newFrames != null) Spr.SetFrames(newFrames);
+            }
+        }
     }
 }
