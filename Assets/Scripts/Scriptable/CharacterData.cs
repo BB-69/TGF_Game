@@ -4,6 +4,9 @@ using UnityEngine;
 public class CharData : ScriptableObject
 {
     public string charName;
-    public int atk, def, spd, maxhp;
-    public Sprite skin;
+    public int ATK;
+    public int DEF;
+    public int maxHP;
+    public int SPD;
+    public Sprite charSprite;
 }

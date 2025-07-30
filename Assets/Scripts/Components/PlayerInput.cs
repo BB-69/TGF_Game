@@ -1,14 +1,14 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(MovementComponent))]
 public class PlayerInput : MonoBehaviour
 {
-    // Components
-    MovementComponent MOV;
+    private MovementComponent movement;
 
     void Start()
     {
-        MOV = GetComponent<MovementComponent>();
+        movement = GetComponent<MovementComponent>();
     }
 
     void FixedUpdate()
@@ -18,9 +18,9 @@ public class PlayerInput : MonoBehaviour
 
     void HandleInput()
     {
-        if (MOV == null) return;
+        if (movement == null) return;
 
-        MOV.moveDir = new Vector2(
+        movement.moveDir = new Vector2(
             Input.GetAxisRaw("Horizontal"),
             Input.GetAxisRaw("Vertical")
         ).normalized;
