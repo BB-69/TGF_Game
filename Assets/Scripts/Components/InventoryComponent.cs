@@ -59,6 +59,13 @@ public class InventoryComponent : MonoBehaviour
 
             case ItemData.ItemType.Weapon:
                 log.Log($"Equipped {item.itemName}! +{item.value} ATK maybe? (not implemented yet)");
+
+                HeldItemSprite held = GetComponentInChildren<HeldItemSprite>();
+                if (held != null)
+                {
+                    Sprite[] weaponFrames = Resources.LoadAll<Sprite>("Visual/Sprites/Weapons/" + item.itemName);
+                    held.SetWeaponFrames(weaponFrames);
+                }
                 break;
 
             default:
