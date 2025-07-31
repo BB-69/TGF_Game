@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d802ec8eac55ebd4b8fb1580b7cedecb, type: 3}
   m_Name: Stage1
   m_EditorClassIdentifier: 
-  mapName: 
-  mapPrefab: {fileID: 0}
+  mapName: Map1
+  sceneName: Stage1
   targetHeadCount: 10

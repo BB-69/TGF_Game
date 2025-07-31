@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     Logger log;
 
     private MapData currentMapData;
-    private GameObject currentMapPrefab;
     public GameObject player;
     public Dictionary<int, MapData> mapLevel { get; private set; }
+    public List<MapData> allMapData= new List<MapData>();
 
     private int currentHeadCount = 0;
     public int currentLevel = 1;
@@ -56,10 +56,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadMapData()
     {
         mapLevel = new Dictionary<int, MapData>();
-        MapData[] loadedMapData = Resources.LoadAll<MapData>(mapPath);
         int level = 1;
-        string _loadedMapLog = "Loaded Maps: ";
-        foreach (MapData d in loadedMapData)
+        string _loadedMapLog = "Loaded Map Data: ";
+        foreach (MapData d in allMapData)
         {
             _loadedMapLog += $"{{ {level} : {d.mapName} }}, ";
             mapLevel[level++] = d;
@@ -72,18 +71,12 @@ public class GameManager : MonoBehaviour
     public void SetupMap(int level)
     {
         if (currentMapData != null) Destroy(currentMapData);
-        if (currentMapPrefab != null) Destroy(currentMapPrefab);
 
+        if (mapLevel[level] == null) return;
         currentMapData = mapLevel[level];
-
-        if (currentMapData.mapPrefab != null)
-        {
-            currentMapPrefab = Instantiate(currentMapData.mapPrefab);
-            currentMapPrefab.SetActive(false);
-            currentMapPrefab.transform.SetParent(transform);
-            currentMapPrefab.transform.localPosition = Vector2.zero;
-            currentMapPrefab.SetActive(true);
-        }
+        string sceneName = currentMapData.sceneName;
+        if (SceneManager.GetSceneByName(sceneName).IsValid())
+            SceneManager.LoadScene(sceneName);
     }
 
     public void ResetGameStats()

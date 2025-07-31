@@ -63,8 +63,7 @@ public class InventoryComponent : MonoBehaviour
                 HeldItemSprite held = GetComponentInChildren<HeldItemSprite>();
                 if (held != null)
                 {
-                    Sprite[] weaponFrames = Resources.LoadAll<Sprite>("Visual/Sprites/Weapons/" + item.itemName);
-                    held.SetWeaponFrames(weaponFrames);
+                    Sprite[] weaponFrames = item.frames;
                 }
                 break;
 

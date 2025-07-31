@@ -4,7 +4,7 @@ using UnityEngine;
 public class MapData : ScriptableObject
 {
     public string mapName;
-    public GameObject mapPrefab;
+    public string sceneName;
 
     public int targetHeadCount;
 }
