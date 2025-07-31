@@ -19,5 +19,9 @@ public class MovementComponent : MonoBehaviour
         Move();
     }
 
-    void Move() { rb.linearVelocity = moveDir * character.SPD; }
+    void Move()
+    {
+        Vector2 targetVel = moveDir * character.SPD;
+        rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, targetVel, 10f * Time.deltaTime);
+    }
 }
