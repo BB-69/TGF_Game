@@ -4,7 +4,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     public string itemName;
-    public Sprite icon;
+    public Sprite[] frames;
     public int value; // damage, heal, etc.
     public ItemType itemType;
 

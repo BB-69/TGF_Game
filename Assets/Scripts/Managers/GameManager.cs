@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentMapData != null) Destroy(currentMapData);
 
+        if (mapLevel[level] == null) return;
         currentMapData = mapLevel[level];
         string sceneName = currentMapData.sceneName;
         if (SceneManager.GetSceneByName(sceneName).IsValid())

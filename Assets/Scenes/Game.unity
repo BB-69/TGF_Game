@@ -370,6 +370,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1239281347}
+  allMapData:
+  - {fileID: 11400000, guid: 303c9bd2b807e804b881509328904fd0, type: 2}
   currentLevel: 1
   isGameOver: 0
   isGameWon: 0
