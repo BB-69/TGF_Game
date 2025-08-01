@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour, IDamagable, IPoolable
     #region Stats
     public float currentHP { get; private set; }
     [SerializeField] protected CharData charData;
-    protected EnemyStats enemyStats;
+    public EnemyStats enemyStats { get; private set; }
 
     #endregion
     Rigidbody2D Rb;
@@ -37,10 +37,16 @@ public class Enemy : MonoBehaviour, IDamagable, IPoolable
 
     protected void Start()
     {
-        currentHP = enemyStats.maxHP;
         Rb = GetComponent<Rigidbody2D>();
         stateMachine.Init(enemyIdleState);
+        SetUp();
     }
+
+    protected void SetUp()
+    {
+        currentHP = enemyStats.maxHP;
+    }
+
     protected void Update()
     {
         stateMachine.currentState.LogicUpdate();
@@ -71,12 +77,13 @@ public class Enemy : MonoBehaviour, IDamagable, IPoolable
 
     public void OnReturnToPool()
     {
-        throw new NotImplementedException();
+        Rb.linearVelocity = Vector2.zero;
+        Rb.angularVelocity = 0;
     }
 
     public void OnSpawn()
     {
-        throw new NotImplementedException();
+        SetUp();
     }
 
     public enum AnimationTriggerType
