@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class PoolManager : MonoBehaviour
 {
+    Logger log;
     public static PoolManager Instance;
 
     private Dictionary<GameObject, GameObjectPool> prefabToPool = new();
@@ -13,6 +14,11 @@ public class PoolManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    void Start()
+    {
+        log = new Logger("PoolManager", null);
     }
 
     public void Register(GameObject prefab, int preload = 20)
@@ -42,7 +48,7 @@ public class PoolManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Trying to return unknown object to pool.");
+            log.Warn("Trying to return unknown object to pool.");
             Destroy(obj);
         }
     }

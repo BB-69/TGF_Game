@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee8a8baaa56f8d4180cfcaab77ed8a5, type: 3}
+  m_Name: WaterSprayerBehaviour
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 6421415047573993947, guid: b1eb55535c93bae4298dee555f2efb29, type: 3}
+  shootOffset: 1.2
+  speed: 5
+  sprayVel: 5
+  velRandMulRange: 0.3
+  rotationRandRange: 45
+  sprayRate: 0.05

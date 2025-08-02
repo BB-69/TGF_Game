@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae7e3ba2922d24c4c96aa9ff1dfed6fd, type: 3}
+  m_Name: Sprayer_Basic
+  m_EditorClassIdentifier: 
+  itemName: Sprayer
+  frames:
+  - {fileID: 2368071892747414366, guid: 14f6e63aa7a5de540b907852bf263562, type: 3}
+  value: 5
+  itemType: 0
+  isStackable: 0
+  SFX: {fileID: 0}
+  weaponSubtype: 3
+  fireRate: 0.3
+  range: 1
+  behaviorScript: {fileID: 11400000, guid: ac995d8cbcc57fa48bc0f2ce4bc2ea05, type: 2}

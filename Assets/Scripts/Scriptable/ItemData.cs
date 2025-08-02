@@ -16,4 +16,6 @@ public class ItemData : ScriptableObject
         Consumable,
         KeyItem
     }
+
+    public AudioClip SFX;
 }

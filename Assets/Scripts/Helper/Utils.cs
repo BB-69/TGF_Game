@@ -27,5 +27,23 @@ namespace Utils
                 return "NONE";
             }
         }
-    }    
+
+        public static bool CompareTagList(GameObject obj, string[] tagList)
+        {
+            foreach (string t in tagList)
+            {
+                if (obj.CompareTag(t)) return true;
+            }
+            return false;
+        }
+
+        public static Vector2 RotateVector2ByDegree(Vector2 v, float deg)
+        {
+            float rad = deg * Mathf.Deg2Rad;
+            return new Vector2(
+                v.x * Mathf.Cos(rad) - v.y * Mathf.Sin(rad),
+                v.x * Mathf.Sin(rad) + v.y * Mathf.Cos(rad)
+            );
+        }
+    }
 }

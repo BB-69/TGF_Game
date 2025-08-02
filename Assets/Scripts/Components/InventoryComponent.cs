@@ -19,10 +19,15 @@ public class InventoryComponent : MonoBehaviour
 {
     Logger log;
     public List<InventorySlot> inventory = new();
+    public ItemData testItem;
 
     void Start()
     {
         log = new Logger("Inventory", this);
+
+        // TEST
+        AddItem(testItem);
+        UseItem(0);
     }
 
     public void AddItem(ItemData newItem)
@@ -58,13 +63,16 @@ public class InventoryComponent : MonoBehaviour
                 break;
 
             case ItemData.ItemType.Weapon:
-                log.Log($"Equipped {item.itemName}! +{item.value} ATK maybe? (not implemented yet)");
+                HeldItemAnimation held = GetComponentInChildren<HeldItemAnimation>();
+                held.SetSpriteAnimation("WaterGun");
 
-                HeldItemSprite held = GetComponentInChildren<HeldItemSprite>();
-                if (held != null)
+                WeaponData weaponData = item as WeaponData;
+                WeaponComponent weaponComp = GetComponent<WeaponComponent>();
+                if (weaponData != null && weaponComp != null)
                 {
-                    Sprite[] weaponFrames = item.frames;
+                    weaponComp.EquipWeapon(weaponData);
                 }
+
                 break;
 
             default:
