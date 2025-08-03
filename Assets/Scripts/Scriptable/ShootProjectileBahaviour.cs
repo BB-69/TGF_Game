@@ -5,10 +5,15 @@ public class ShootProjectileBehavior : ScriptableObject, IWeaponBehavior
 {
     public GameObject projectilePrefab;
     public float shootOffset = 1.0f;
+    public float shakeMagnitude = 0.0f;
+
+    [Header("Properties")]
     public float speed = 10f;
 
     public virtual void Use(GameObject owner)
     {
+        CameraFollowPlayer.Instance.Shake(shakeMagnitude);
+        
         Transform firePoint = owner.transform.Find("FirePoint");
         if (firePoint != null && projectilePrefab != null)
         {

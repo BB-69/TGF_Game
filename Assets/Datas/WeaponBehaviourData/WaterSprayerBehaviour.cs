@@ -12,6 +12,8 @@ public class WaterSprayerBehavior : ShootProjectileBehavior
 
     public override void Use(GameObject owner)
     {
+        CameraFollowPlayer.Instance.Shake(shakeMagnitude);
+
         sprayTimer -= Time.deltaTime;
         if (sprayTimer > 0) return;
 

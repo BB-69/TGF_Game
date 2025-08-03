@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 6421415047573993947, guid: b1eb55535c93bae4298dee555f2efb29, type: 3}
   shootOffset: 1
+  shakeMagnitude: 0.04
   speed: 5.5
   velRandMulRange: 0.2
   rotationRandRange: 45
