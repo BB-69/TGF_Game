@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5298395696304238073}
   - component: {fileID: 6864945514531205200}
   - component: {fileID: 8725580217357481956}
+  - component: {fileID: -5919033243567173924}
   m_Layer: 6
   m_Name: WaterBlob
   m_TagString: Projectile
@@ -165,5 +166,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4e1380742c90447a166f14373a04a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifetime: 0.5
+  lifetime: 0.3
   fadeOutDuration: 0.4
+--- !u!114 &-5919033243567173924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6421415047573993947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 674c0798022a61a438ad642fe51d5e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sortLoopInterval: 0.05
+  onlySetLocal: 0
+  orderPadding: 0
+  localSprite: []
+  localPadding: 5
+  intervalPadding: 1
