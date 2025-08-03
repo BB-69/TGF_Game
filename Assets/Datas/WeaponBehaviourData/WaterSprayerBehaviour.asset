@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: WaterSprayerBehaviour
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 6421415047573993947, guid: b1eb55535c93bae4298dee555f2efb29, type: 3}
-  shootOffset: 1.2
-  speed: 5
-  sprayVel: 5
-  velRandMulRange: 0.3
+  shootOffset: 1
+  speed: 5.5
+  velRandMulRange: 0.2
   rotationRandRange: 45
-  sprayRate: 0.05
+  sprayRate: 0.01

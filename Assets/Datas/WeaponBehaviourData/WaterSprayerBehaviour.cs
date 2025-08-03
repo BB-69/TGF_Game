@@ -5,7 +5,6 @@ using Utils;
 public class WaterSprayerBehavior : ShootProjectileBehavior
 {
     [Header("Water Sprayer Settings")]
-    public float sprayVel = 10f;
     public float velRandMulRange = 0.2f;
     public float rotationRandRange = 45.0f;
     public float sprayRate = 0.05f;
@@ -28,7 +27,7 @@ public class WaterSprayerBehavior : ShootProjectileBehavior
 
             Rigidbody2D rb = blob.GetComponent<Rigidbody2D>();
             rb.linearVelocity = CustomHelper.RotateVector2ByDegree((
-                firePoint.right * sprayVel * UnityEngine.Random.Range( // default + random velocity
+                firePoint.right * speed * UnityEngine.Random.Range( // default + random velocity
                 Mathf.Max(1.0f - velRandMulRange, 0.0f),
                 Mathf.Max(1.0f + velRandMulRange, 0.0f)
             )),
