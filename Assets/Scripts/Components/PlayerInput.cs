@@ -3,18 +3,18 @@ using UnityEngine;
 using Utils;
 
 [RequireComponent(typeof(MovementComponent))]
-// typeof(AnimationComponent), typeof(HeldItemAnimation) in child
+// typeof(AnimationComponent), typeof(LayerComponent) in child
 public class PlayerInput : MonoBehaviour
 {
     private MovementComponent Mov;
     private AnimationComponent Ani;
-    private HeldItemAnimation heldAni;
+    private LayerComponent Lay;
 
     void Start()
     {
         Mov = GetComponent<MovementComponent>();
         Ani = GetComponentInChildren<AnimationComponent>();
-        heldAni = GetComponentInChildren<HeldItemAnimation>();
+        Lay = GetComponentInChildren<LayerComponent>();
     }
 
     void FixedUpdate()
@@ -38,10 +38,10 @@ public class PlayerInput : MonoBehaviour
                 Ani.SetDirection(dir);
             }
 
-            if (heldAni != null)
+            if (Lay != null)
             {
-                Vector3 p = heldAni.transform.localPosition;
-                heldAni.transform.localPosition = new Vector3(p.x, p.y, (dir != "UP") ? -1 : 1);
+                Lay.localPadding = (dir != "UP") ? 5 : -5;
+                Lay.intervalPadding = (dir != "UP") ? 1 : -1;
             }
         }
     }
