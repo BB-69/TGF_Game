@@ -1,9 +1,11 @@
 using UnityEngine;
+using Utils;
 
 [RequireComponent(typeof(CharacterComponent))]
 public class WeaponComponent : MonoBehaviour
 {
     Logger log;
+    private Camera cam;
     private CharacterComponent character;
     private Transform firePoint;
     public WeaponData currentWeapon;
@@ -13,6 +15,7 @@ public class WeaponComponent : MonoBehaviour
         character = GetComponent<CharacterComponent>();
         log = new Logger("Weapon", character);
 
+        cam = Camera.main;
         firePoint = transform.Find("FirePoint");
     }
 
@@ -21,15 +24,14 @@ public class WeaponComponent : MonoBehaviour
         if (currentWeapon == null) return;
 
         RotateTowardMouse();
-        if (Input.GetMouseButton(0)) UseWeapon();
     }
 
     void RotateTowardMouse()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = mousePos - firePoint.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        firePoint.rotation = Quaternion.Euler(0, 0, angle);
+        firePoint.rotation = CustomHelper.GetRotationZ(
+            firePoint.position,
+            cam.ScreenToWorldPoint(Input.mousePosition)
+        );
     }
 
     public void UseWeapon()

@@ -45,5 +45,19 @@ namespace Utils
                 v.x * Mathf.Sin(rad) + v.y * Mathf.Cos(rad)
             );
         }
+
+        public static Quaternion GetRotationZ(Vector2 vFrom, Vector2 vTo)
+        {
+            Vector2 direction = vTo - vFrom;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            return Quaternion.Euler(0, 0, angle);
+        }
+
+        public static Vector3 GetCameraCenter(Camera cam)
+        {
+            Vector3 cameraCenter = cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f, cam.nearClipPlane));
+            cameraCenter.z = 0;
+            return cameraCenter;
+        }
     }
 }

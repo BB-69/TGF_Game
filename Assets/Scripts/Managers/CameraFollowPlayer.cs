@@ -1,8 +1,10 @@
 using UnityEngine;
+using Utils;
 
 public class CameraFollowPlayer : MonoBehaviour
 {
     public static CameraFollowPlayer Instance;
+    private Camera cam;
     private Transform player;
 
     public float zPos = -100f;
@@ -11,6 +13,11 @@ public class CameraFollowPlayer : MonoBehaviour
     private Vector3 movePos;
     public float followSpeed = 2f;
     public float stoppingDistance = 0.01f;
+
+    [Header("Interactive Camera")]
+    private Vector3 panPos = Vector3.zero;
+    public float panWeight = 0.5f;
+    private bool isPanning = false;
 
     [Header("Shake Effect")]
     private Vector3 shakePos = Vector3.zero;
@@ -24,6 +31,7 @@ public class CameraFollowPlayer : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
+        cam = Camera.main ?? null;
         player = GameManager.Instance?.player.transform;
         Vector3 initPos = player?.position ?? Vector2.zero;
         initPos.z = zPos;
@@ -32,15 +40,17 @@ public class CameraFollowPlayer : MonoBehaviour
 
     void FixedUpdate()
     {
-        movePos = transform.position - shakePos;
+        player = GameManager.Instance?.player.transform;
+
+        movePos = transform.position - (shakePos + panPos);
         Move();
+        HandlePan();
         HandleShake();
-        transform.position = movePos + shakePos;
+        transform.position = movePos + (shakePos + panPos);
     }
 
     private void Move()
     {
-        player = GameManager.Instance?.player.transform;
         Vector3 targetPos = player?.position ?? movePos;
         targetPos.z = zPos;
 
@@ -48,8 +58,24 @@ public class CameraFollowPlayer : MonoBehaviour
         float distance = toTarget.magnitude;
 
         if (distance > stoppingDistance)
-            movePos = Vector3.Lerp(movePos, targetPos, followSpeed * Time.deltaTime);
+            movePos = Vector3.Lerp(movePos, targetPos, followSpeed * (isPanning ? 4 : 1) * Time.deltaTime);
         else movePos = targetPos;
+    }
+
+    public void SetPan(bool setPan) => isPanning = setPan;
+    private void HandlePan()
+    {
+        Vector3 targetPos = isPanning ?
+            cam.ScreenToWorldPoint(Input.mousePosition) - CustomHelper.GetCameraCenter(cam) :
+            Vector3.zero;
+        targetPos.z = zPos;
+        
+        Vector3 toTarget = targetPos - panPos;
+        float distance = toTarget.magnitude;
+
+        if (distance > stoppingDistance)
+            panPos = Vector3.Lerp(panPos, panWeight * targetPos, followSpeed * 4 * Time.deltaTime);
+        else panPos = panWeight * targetPos;
     }
 
     public void Shake(float magnitude)

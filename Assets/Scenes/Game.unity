@@ -316,6 +316,7 @@ MonoBehaviour:
   zPos: -100
   followSpeed: 2
   stoppingDistance: 0.01
+  panWeight: 0.5
   shakeInterval: 0.03
   shakeMagnitude: 0
 --- !u!1 &619394800
