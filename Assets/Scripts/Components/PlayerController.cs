@@ -4,9 +4,8 @@ using Utils;
 
 [RequireComponent(typeof(MovementComponent), typeof(WeaponComponent))]
 // typeof(AnimationComponent), typeof(LayerComponent) in child
-public class PlayerInput : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    private Camera cam;
     private MovementComponent Mov;
     private WeaponComponent Wep;
     private AnimationComponent Ani;
@@ -14,7 +13,6 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
-        cam = Camera.main;
         Mov = GetComponent<MovementComponent>();
         Wep = GetComponent<WeaponComponent>();
         Ani = GetComponentInChildren<AnimationComponent>();
