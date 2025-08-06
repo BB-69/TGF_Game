@@ -23,6 +23,9 @@ public class PlayerInput : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.Instance?.player == null)
+            GameManager.Instance.player = gameObject;
+
         HandleInput();
     }
 

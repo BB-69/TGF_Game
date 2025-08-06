@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     private MapData currentMapData;
     public GameObject player;
     public Dictionary<int, MapData> mapLevel { get; private set; }
-    public List<MapData> allMapData= new List<MapData>();
+    public List<MapData> allMapData;
 
     private int currentHeadCount = 0;
     public int currentLevel = 1;
@@ -21,7 +21,11 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else Destroy(gameObject);
     }
 
@@ -42,12 +46,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (currentMapData && !isGameOver && !isGameWon) CheckWinLose();
+        // abcde
     }
 
     private const string mapPath = "MapData/";
     private IEnumerator LoadMapData()
     {
+        if (allMapData == null)
+        {
+            log.Error("No map data assigned!");
+            yield break;
+        }
+
         mapLevel = new Dictionary<int, MapData>();
         int level = 1;
         string _loadedMapLog = "Loaded Map Data: ";
@@ -68,8 +78,15 @@ public class GameManager : MonoBehaviour
         if (mapLevel[level] == null) return;
         currentMapData = mapLevel[level];
         string sceneName = currentMapData.sceneName;
-        if (SceneManager.GetSceneByName(sceneName).IsValid())
+
+        try
+        {
             SceneManager.LoadScene(sceneName);
+        }
+        catch
+        {
+            log.Error($"Can't load scene {sceneName}");
+        }
     }
 
     public void ResetGameStats()
@@ -82,12 +99,6 @@ public class GameManager : MonoBehaviour
     public void AddHeadCount(int amount)
     {
         currentHeadCount += amount;
-    }
-
-    void CheckWinLose()
-    {
-        if (currentHeadCount >= currentMapData.targetHeadCount) WinGame();
-        else if (player == null) LoseGame();
     }
 
     void WinGame()
