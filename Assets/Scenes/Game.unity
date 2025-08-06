@@ -314,9 +314,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zPos: -100
-  followSpeed: 2
+  followSpeed: 3
   stoppingDistance: 0.01
-  panWeight: 0.5
+  panSpeed: 1
+  panWeight: 0.2
   shakeInterval: 0.03
   shakeMagnitude: 0
 --- !u!1 &619394800

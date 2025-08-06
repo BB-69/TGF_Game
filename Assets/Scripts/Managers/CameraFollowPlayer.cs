@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Utils;
 
 public class CameraFollowPlayer : MonoBehaviour
@@ -6,18 +7,20 @@ public class CameraFollowPlayer : MonoBehaviour
     public static CameraFollowPlayer Instance;
     private Camera cam;
     private Transform player;
+    private Rigidbody2D playerRb;
 
     public float zPos = -100f;
 
     [Header("Camera Movement")]
     private Vector3 movePos;
-    public float followSpeed = 2f;
+    public float followSpeed = 3f;
     public float stoppingDistance = 0.01f;
 
-    [Header("Interactive Camera")]
+    [Header("Pan Effect")]
     private Vector3 panPos = Vector3.zero;
-    public float panWeight = 0.5f;
-    private bool isPanning = false;
+    public float panSpeed = 1f;
+    public float panWeight = 0.2f;
+    private bool isPanning => player != null && Input.mousePosition != null;
 
     [Header("Shake Effect")]
     private Vector3 shakePos = Vector3.zero;
@@ -32,15 +35,16 @@ public class CameraFollowPlayer : MonoBehaviour
         else Destroy(gameObject);
 
         cam = Camera.main ?? null;
-        player = GameManager.Instance?.player.transform;
-        Vector3 initPos = player?.position ?? Vector2.zero;
-        initPos.z = zPos;
-        movePos = initPos;
     }
 
     void FixedUpdate()
     {
-        player = GameManager.Instance?.player.transform;
+        if (GameManager.Instance?.player != null && player == null)
+        {
+            player = GameManager.Instance?.player.transform;
+            playerRb = player.GetComponent<Rigidbody2D>();
+            transform.position = player.position;
+        }
 
         movePos = transform.position - (shakePos + panPos);
         Move();
@@ -58,11 +62,11 @@ public class CameraFollowPlayer : MonoBehaviour
         float distance = toTarget.magnitude;
 
         if (distance > stoppingDistance)
-            movePos = Vector3.Lerp(movePos, targetPos, followSpeed * (isPanning ? 4 : 1) * Time.deltaTime);
+            movePos = Vector3.Lerp(movePos, targetPos, followSpeed * Time.deltaTime);
         else movePos = targetPos;
     }
 
-    public void SetPan(bool setPan) => isPanning = setPan;
+    //public void SetPan(bool setPan) => isPanning = setPan;
     private void HandlePan()
     {
         Vector3 targetPos = isPanning ?
@@ -74,7 +78,11 @@ public class CameraFollowPlayer : MonoBehaviour
         float distance = toTarget.magnitude;
 
         if (distance > stoppingDistance)
-            panPos = Vector3.Lerp(panPos, panWeight * targetPos, followSpeed * 4 * Time.deltaTime);
+            panPos = Vector3.Lerp(
+                panPos,
+                panWeight * targetPos + 0.4f*(Vector3)(playerRb?.linearVelocity ?? Vector2.zero),
+                panSpeed * Time.deltaTime
+            );
         else panPos = panWeight * targetPos;
     }
 

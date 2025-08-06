@@ -53,10 +53,5 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetMouseButton(0)) Wep.UseWeapon();
         }
-
-        if (cam != null && CameraFollowPlayer.Instance != null)
-        {
-            CameraFollowPlayer.Instance.SetPan(Input.GetMouseButton(1));
-        }
     }
 }
