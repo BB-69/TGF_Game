@@ -1,18 +1,19 @@
 using System;
 using UnityEngine;
-[RequireComponent(typeof(EnemyAttackRange), typeof(EnemyChaseRange), typeof(Rigidbody2D))]
 
-public class Enemy : MonoBehaviour, IDamagable, IPoolable
+[RequireComponent(typeof(EnemyAttackRange), typeof(EnemyChaseRange))]
+[RequireComponent(typeof(MovementComponent), typeof(WeaponComponent))]
+// typeof(AnimationComponent), typeof(LayerComponent) in child
+public class EnemyController : MonoBehaviour, IPoolable
 {
-    #region Stats
-    public float currentHP { get; private set; }
-    [SerializeField] protected CharData charData;
-    public EnemyStats enemyStats { get; private set; }
-
+    #region Components
+    private MovementComponent Mov;
+    private WeaponComponent Wep;
+    private AnimationComponent Ani;
+    private LayerComponent Lay;
     #endregion
-    Rigidbody2D Rb;
-    #region StateMachine
 
+    #region StateMachine
     protected StateMachine stateMachine;
     public EnemyIdleState enemyIdleState{ get; private set; }
     public EnemyChaseState enemyChaseState{ get; private set; }
@@ -24,67 +25,53 @@ public class Enemy : MonoBehaviour, IDamagable, IPoolable
     public bool isInAttackRange { get; private set; }
     #endregion
 
-    protected void Awake()
+    void Awake()
     {
         stateMachine = new StateMachine();
         enemyIdleState = new EnemyIdleState(this, stateMachine);
         enemyChaseState = new EnemyChaseState(this, stateMachine);
         enemyAttackState = new EnemyAttackState(this, stateMachine);
-
-        enemyStats = new EnemyStats(charData.maxHP, charData.ATK, charData.SPD, charData.DEF);
     }
 
 
-    protected void Start()
+    void Start()
     {
-        Rb = GetComponent<Rigidbody2D>();
+        Mov = GetComponent<MovementComponent>();
+        Wep = GetComponent<WeaponComponent>();
+        Ani = GetComponentInChildren<AnimationComponent>();
+        Lay = GetComponentInChildren<LayerComponent>();
         stateMachine.Init(enemyIdleState);
-        SetUp();
     }
 
-    protected void SetUp()
-    {
-        currentHP = enemyStats.maxHP;
-    }
-
-    protected void Update()
+    void Update()
     {
         stateMachine.currentState.LogicUpdate();
     }
 
-    protected void FixedUpdate()
+    void FixedUpdate()
     {
         stateMachine.currentState.FixedUpdate();
-    }
-
-    public void Move(Vector2 vel)
-    {
-        Rb.linearVelocity = vel;
-    }
-    public void TakeDamage(float dmg)
-    {
-        currentHP -= dmg;
-        if (currentHP <= 0) Die();
-    }
-
-    protected void Die()
-    {
-        PoolManager.Instance.Despawn(gameObject);
-    }
-
-    private void AnimationTrigger(AnimationTriggerType animationTriggerType)
-    { }
-
-    public void OnReturnToPool()
-    {
-        Rb.linearVelocity = Vector2.zero;
-        Rb.angularVelocity = 0;
+        HandleInput();
     }
 
     public void OnSpawn()
     {
-        SetUp();
+        
     }
+
+    public void OnReturnToPool()
+    {
+        Mov.rb.linearVelocity = Vector2.zero;
+        Mov.rb.angularVelocity = 0;
+    }
+
+    void HandleInput()
+    {
+        
+    }
+
+    private void AnimationTrigger(AnimationTriggerType animationTriggerType)
+    { }
 
     public enum AnimationTriggerType
     {

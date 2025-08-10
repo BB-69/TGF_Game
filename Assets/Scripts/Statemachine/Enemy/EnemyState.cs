@@ -1,10 +1,10 @@
 
 public class EnemyState
 {
-    protected Enemy enemy;
+    protected EnemyController enemy;
     protected StateMachine statemachine;
 
-    public EnemyState(Enemy enemy, StateMachine stateMachine)
+    public EnemyState(EnemyController enemy, StateMachine stateMachine)
     {
         this.enemy = enemy;
         this.statemachine = stateMachine;
@@ -14,5 +14,5 @@ public class EnemyState
     public virtual void ExitState() { }
     public virtual void FixedUpdate() { }
     public virtual void LogicUpdate() { }
-    public virtual void AnimationEvent(Enemy.AnimationTriggerType triggerType){}
+    public virtual void AnimationEvent(EnemyController.AnimationTriggerType triggerType){}
 }

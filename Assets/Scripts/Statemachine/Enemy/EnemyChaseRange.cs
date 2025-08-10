@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class EnemyChaseRange : MonoBehaviour
 {
-    Enemy enemy;
+    EnemyController enemy;
     void Awake()
     {
-        enemy = GetComponentInParent<Enemy>();
+        enemy = GetComponentInParent<EnemyController>();
     }
+    
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag=="Player")
+        if (collision.tag == "Player")
             enemy.SetChaseRange(true);
     }
 

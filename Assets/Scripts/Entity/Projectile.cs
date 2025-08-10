@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour, IProjectile
     protected Rigidbody2D rb;
     public float lifetime = 1.5f;
     private float currentLifetime = 0.0f;
-    protected float damage = 0.0f;
+    protected int damage = 0;
     public string[] excludedTags { get; private set; }
 
     public void ExcludeTags(string[] tags)
@@ -35,7 +35,11 @@ public class Projectile : MonoBehaviour, IProjectile
 
         if (other is IDamagable)
         {
-            other.GetComponent<Enemy>().TakeDamage(damage);
+            // not necessary but to make sure it's an entity
+            MonoBehaviour controllerComponent =
+                (MonoBehaviour)other.GetComponent<EnemyController>() ??
+                other.GetComponent<PlayerController>();
+            controllerComponent.GetComponent<HealthComponent>()?.TakeDamage(damage);
         }
         StartCoroutine(Disappear());
     }

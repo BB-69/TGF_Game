@@ -1,6 +1,6 @@
 public class EnemyChaseState : EnemyState
 {
-    public EnemyChaseState(Enemy enemy, StateMachine stateMachine) : base(enemy, stateMachine)
+    public EnemyChaseState(EnemyController enemy, StateMachine stateMachine) : base(enemy, stateMachine)
     {
     }
     public override void EnterState()
@@ -20,5 +20,5 @@ public class EnemyChaseState : EnemyState
         base.LogicUpdate();
         if (enemy.isInAttackRange) statemachine.ChangeState(enemy.enemyAttackState);
     }
-    public override void AnimationEvent(Enemy.AnimationTriggerType triggerType) { }
+    public override void AnimationEvent(EnemyController.AnimationTriggerType triggerType) { }
 }

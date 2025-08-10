@@ -4,9 +4,8 @@ using Utils;
 
 [RequireComponent(typeof(MovementComponent), typeof(WeaponComponent))]
 // typeof(AnimationComponent), typeof(LayerComponent) in child
-public class PlayerInput : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPoolable
 {
-    private Camera cam;
     private MovementComponent Mov;
     private WeaponComponent Wep;
     private AnimationComponent Ani;
@@ -14,7 +13,6 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
-        cam = Camera.main;
         Mov = GetComponent<MovementComponent>();
         Wep = GetComponent<WeaponComponent>();
         Ani = GetComponentInChildren<AnimationComponent>();
@@ -27,6 +25,17 @@ public class PlayerInput : MonoBehaviour
             GameManager.Instance.player = gameObject;
 
         HandleInput();
+    }
+
+    public void OnSpawn()
+    {
+        
+    }
+
+    public void OnReturnToPool()
+    {
+        Mov.rb.linearVelocity = Vector2.zero;
+        Mov.rb.angularVelocity = 0;
     }
 
     void HandleInput()

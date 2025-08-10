@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class EnemyAttackRange : MonoBehaviour
 {
-    Enemy enemy;
+    EnemyController enemy;
     void Awake()
     {
-        enemy = GetComponentInParent<Enemy>();
+        enemy = GetComponentInParent<EnemyController>();
     }
+    
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag=="Player")
+        if (collision.tag == "Player")
             enemy.SetAttackRange(true);
     }
 

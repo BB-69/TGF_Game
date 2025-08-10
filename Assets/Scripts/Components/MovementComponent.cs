@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(CharacterComponent))]
 public class MovementComponent : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public Rigidbody2D rb { get; private set; }
     private CharacterComponent character;
     [HideInInspector] public Vector2 moveDir = Vector2.zero;
 
@@ -16,7 +16,10 @@ public class MovementComponent : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        if (gameObject.activeInHierarchy)
+        {
+            Move();
+        }
     }
 
     void Move()
