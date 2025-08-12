@@ -5,16 +5,17 @@ public class Grid<TGridObject>
 {
     private int width;
     private int height;
-    private Vector3 originPosition;
+    private Vector3 originPosition = Vector3.zero;
+    private Vector3Int offsetPosition;
     private TGridObject[,] gridArray;
     private float cellSize;
 
-    public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createGridObject)
+    public Grid(int width, int height, float cellSize, Vector3Int offsetPosition, Func<Grid<TGridObject>, int, int, TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        this.originPosition = originPosition;
+        this.offsetPosition = offsetPosition;
         gridArray = new TGridObject[width, height];
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
@@ -47,11 +48,11 @@ public class Grid<TGridObject>
 
     }
 
-    public Vector3 GetWorldPosition(int x, int y) => new Vector3(x, y) * cellSize;
+    public Vector3 GetWorldPosition(int x, int y) => (new Vector3(x, y) + offsetPosition) * cellSize;
     public void GetXYFromWorldPosition(Vector3 worldPosition, out int x, out int y)
     {
-        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
-        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
+        x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize) - offsetPosition.x;
+        y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize) - offsetPosition.y;
     }
     #endregion
 }

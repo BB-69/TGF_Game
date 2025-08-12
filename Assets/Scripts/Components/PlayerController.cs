@@ -6,6 +6,7 @@ using Utils;
 // typeof(AnimationComponent), typeof(LayerComponent) in child
 public class PlayerController : MonoBehaviour, IPoolable
 {
+    private Camera cam;
     private MovementComponent Mov;
     private WeaponComponent Wep;
     private AnimationComponent Ani;
@@ -17,6 +18,13 @@ public class PlayerController : MonoBehaviour, IPoolable
         Wep = GetComponent<WeaponComponent>();
         Ani = GetComponentInChildren<AnimationComponent>();
         Lay = GetComponentInChildren<LayerComponent>();
+
+        cam = Camera.main;
+    }
+
+    void Update()
+    {
+        if (Wep != null) RotateTowardMouse();
     }
 
     void FixedUpdate()
@@ -36,6 +44,14 @@ public class PlayerController : MonoBehaviour, IPoolable
     {
         Mov.rb.linearVelocity = Vector2.zero;
         Mov.rb.angularVelocity = 0;
+    }
+
+    void RotateTowardMouse()
+    {
+        Wep.firePoint.rotation = CustomHelper.GetRotationZ(
+            Wep.firePoint.position,
+            cam.ScreenToWorldPoint(Input.mousePosition)
+        );
     }
 
     void HandleInput()

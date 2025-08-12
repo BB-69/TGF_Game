@@ -4,22 +4,39 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class PathManager : MonoBehaviour
 {
+    Logger log;
+    public PathfindingData data;
+
+    [Header("Data")]
     public int width = 20;
     public int height = 20;
-    public float cellSize = 1f;
+    public Vector2Int offset = Vector2Int.zero;
+    public float cellSize = 1f; // FIX: changing size does not dynamically resize the entire grid, only cell size itself
     private Dictionary<GameObject, PathNode> entityNodes = new Dictionary<GameObject, PathNode>();
     public static PathManager Instance { get; private set; }
     public PathFinding pathFinding;
 
     private void Awake()
     {
-        if(Instance!=null) { Destroy(this.gameObject); }
-        else Instance =  this;   
+        if (Instance != null) { Destroy(this.gameObject); }
+        else Instance = this;
     }
 
     private void OnEnable()
     {
-        pathFinding = new PathFinding(width, height);
+        log = new Logger("PathFinding", null);
+
+        if (data != null) LoadFromData();
+        else
+        {
+            pathFinding = new PathFinding(width, height, offset);
+            log.Warn("No PathFinding Data Assigned!");
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (data != null) SaveToData();
     }
 
     private void Update()
@@ -49,7 +66,7 @@ public class PathManager : MonoBehaviour
             entityNodes.Remove(entity);
         }
     }
-    
+
     //call to update each entity current node
     private void UpdateEntityPosition(GameObject entity)
     {
@@ -89,4 +106,60 @@ public class PathManager : MonoBehaviour
             }
         }
     }
+
+    #region Data
+    private void LoadFromData()
+    {
+        pathFinding = new PathFinding(data.width, data.height, data.offset);
+
+        this.width = data.width;
+        this.height = data.height;
+        data.Init();
+
+        var grid = pathFinding.GetGrid();
+        for (int x = 0; x < data.width; x++)
+        {
+            for (int y = 0; y < data.height; y++)
+            {
+                PathNode node = grid.GetGridObject(x, y);
+                node.isWalkable = data.GetWalkable(x, y);
+            }
+        }
+    }
+
+    public void SaveToData()
+    {
+        if (data == null || pathFinding == null) return;
+
+        data.width = this.width;
+        data.height = this.height;
+        data.Init();
+
+        var grid = pathFinding.GetGrid();
+        int total_null = 0, total_walkable = 0;
+        for (int x = 0; x < data.width; x++)
+        {
+            for (int y = 0; y < data.height; y++)
+            {
+                PathNode node = grid.GetGridObject(x, y);
+                if (node == null) total_null++;
+                else if (node.isWalkable) total_walkable++;
+                data.SetWalkable(x, y, node?.isWalkable ?? true);
+            }
+        }
+
+#if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(data);
+#endif
+    }
+
+    private void OnValidate()
+    {
+        if (!Application.isPlaying && data != null)
+        {
+            SaveToData();
+            LoadFromData();
+        }
+    }
+    #endregion
 }

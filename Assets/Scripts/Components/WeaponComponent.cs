@@ -5,9 +5,8 @@ using Utils;
 public class WeaponComponent : MonoBehaviour
 {
     Logger log;
-    private Camera cam;
     private CharacterComponent character;
-    private Transform firePoint;
+    public Transform firePoint { get; private set; }
     public WeaponData currentWeapon;
 
     void Awake()
@@ -15,23 +14,7 @@ public class WeaponComponent : MonoBehaviour
         character = GetComponent<CharacterComponent>();
         log = new Logger("Weapon", character);
 
-        cam = Camera.main;
         firePoint = transform.Find("FirePoint");
-    }
-
-    void Update()
-    {
-        if (currentWeapon == null) return;
-
-        RotateTowardMouse();
-    }
-
-    void RotateTowardMouse()
-    {
-        firePoint.rotation = CustomHelper.GetRotationZ(
-            firePoint.position,
-            cam.ScreenToWorldPoint(Input.mousePosition)
-        );
     }
 
     public void UseWeapon()
